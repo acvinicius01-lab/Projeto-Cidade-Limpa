@@ -1,0 +1,253 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+body {
+  background: #d9dad8;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.app {
+  width: 100%;
+  max-width: 900px;
+  background: #fff;
+  border: 1px solid #b8bab7;
+  border-radius: 2px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+/* ===== Barra de menu (equivalente à JMenuBar) ===== */
+.menu-bar {
+  display: flex;
+  background: #eceeec;
+  border-bottom: 1px solid #c7c9c6;
+}
+
+.menu {
+  position: relative;
+}
+
+.menu-btn {
+  background: none;
+  border: none;
+  padding: 14px 20px;
+  font-size: 15px;
+  color: #333;
+  cursor: pointer;
+}
+
+.menu-btn:hover,
+.menu.aberto .menu-btn {
+  background: #fff;
+  border: 1px solid #e08a1e;
+  padding: 13px 19px;
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 200px;
+  background: #fff;
+  border: 1px solid #d0d0d0;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+  display: none;
+  z-index: 10;
+}
+
+.menu.aberto .dropdown {
+  display: block;
+}
+
+.dropdown-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 12px 16px;
+  font-size: 14px;
+  color: #222;
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background: #f0f4ee;
+}
+
+/* ===== Janela / conteúdo principal ===== */
+.janela {
+  min-height: 480px;
+  padding: 60px 40px;
+}
+
+.tela.oculta {
+  display: none;
+}
+
+/* Tela inicial */
+#tela-inicial {
+  text-align: center;
+  padding-top: 80px;
+}
+
+.titulo {
+  font-size: 52px;
+  font-weight: 800;
+  color: #1c5e34;
+  letter-spacing: 0.5px;
+}
+
+.subtitulo {
+  margin-top: 14px;
+  font-size: 21px;
+  color: #9a8f68;
+}
+
+/* Formulários */
+h2 {
+  color: #1e6b3d;
+  margin-bottom: 20px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 420px;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  color: #444;
+  gap: 6px;
+}
+
+input,
+textarea {
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+button[type="submit"] {
+  margin-top: 8px;
+  padding: 12px;
+  background: #1e6b3d;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 15px;
+  cursor: pointer;
+  width: fit-content;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+button[type="submit"]:hover {
+  background: #17532f;
+}
+
+.mensagem-sucesso {
+  margin-top: 16px;
+  color: #1e6b3d;
+  font-weight: 600;
+}
+
+.preview {
+  max-width: 200px;
+  border-radius: 4px;
+  margin-top: -4px;
+}
+
+.oculta {
+  display: none;
+}
+
+/* Listas salvas (localStorage) */
+.lista {
+  margin-top: 30px;
+  border-top: 1px solid #eee;
+  padding-top: 16px;
+}
+
+.item-lista {
+  padding: 10px 0;
+  border-bottom: 1px dashed #e0e0e0;
+  font-size: 14px;
+  color: #333;
+}
+
+.item-lista img {
+  max-width: 120px;
+  display: block;
+  margin-top: 6px;
+  border-radius: 4px;
+}
+
+/* Reciclagem */
+.cores-reciclagem {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.cor {
+  padding: 16px;
+  border-radius: 6px;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.azul { background: #2563eb; }
+.vermelho { background: #dc2626; }
+.verde { background: #16a34a; }
+.amarelo { background: #ca8a04; }
+.marrom { background: #78350f; }
+
+ul {
+  margin-top: 12px;
+  padding-left: 20px;
+}
+
+li {
+  margin-bottom: 6px;
+}
+
+
+.btn-voltar {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: 1px solid #ccc;
+  color: #555;
+  font-size: 13px;
+  padding: 8px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 24px;
+}
+
+.btn-voltar:hover {
+  background: #f0f4ee;
+  border-color: #1e6b3d;
+  color: #1e6b3d;
+}

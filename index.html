@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cidade Limpa</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="app">
+
+  <!-- Barra de menu, equivalente à JMenuBar do NetBeans -->
+  <nav class="menu-bar" id="menuBar">
+    <div class="menu">
+      <button class="menu-btn" data-menu="cadastro">Cadastro</button>
+      <div class="dropdown" id="dropdown-cadastro">
+        <button class="dropdown-item" data-tela="cadastro">Novo Cadastro</button>
+      </div>
+    </div>
+
+    <div class="menu">
+      <button class="menu-btn" data-menu="denuncias">Denúncias</button>
+      <div class="dropdown" id="dropdown-denuncias">
+        <button class="dropdown-item" data-tela="denuncia">Fazer Denúncia</button>
+      </div>
+    </div>
+
+    <div class="menu">
+      <button class="menu-btn" data-menu="conscientizacao">Conscientização</button>
+      <div class="dropdown" id="dropdown-conscientizacao">
+        <button class="dropdown-item" data-tela="informacoes">Informações</button>
+        <button class="dropdown-item" data-tela="reciclagem">Reciclagem</button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="janela">
+
+    <!-- Tela Inicial -->
+    <section class="tela" id="tela-inicial">
+      <h1 class="titulo">CIDADE LIMPA</h1>
+      <p class="subtitulo">Juntos por uma Cerro Corá mais limpa.</p>
+    </section>
+
+    <!-- Tela de Cadastro -->
+    <section class="tela oculta" id="tela-cadastro">
+      <button class="btn-voltar" data-voltar>← Voltar</button>
+      <h2>Novo Cadastro</h2>
+      <form id="form-cadastro">
+        <label>Nome completo
+          <input type="text" id="cad-nome" required>
+        </label>
+        <label>E-mail
+          <input type="email" id="cad-email" required>
+        </label>
+        <label>Senha
+          <input type="password" id="cad-senha" required minlength="4">
+        </label>
+        <button type="submit">Cadastrar</button>
+      </form>
+      <p class="mensagem-sucesso oculta" id="msg-cadastro">✅ Cadastro realizado</p>
+      <div id="lista-usuarios" class="lista"></div>
+    </section>
+
+    <!-- Tela de Denúncia -->
+    <section class="tela oculta" id="tela-denuncia">
+      <button class="btn-voltar" data-voltar>← Voltar</button>
+      <h2>Fazer Denúncia</h2>
+      <form id="form-denuncia">
+        <label>Local do problema
+          <input type="text" id="den-local" required placeholder="Ex: Rua das Flores, 123">
+        </label>
+        <label>Descrição
+          <textarea id="den-descricao" required placeholder="Descreva o que está acontecendo..."></textarea>
+        </label>
+        <label>Foto (opcional)
+          <input type="file" id="den-foto" accept="image/*">
+        </label>
+        <img id="preview-foto" class="preview oculta" alt="Pré-visualização da foto">
+        <button type="submit">Enviar denúncia</button>
+      </form>
+      <p class="mensagem-sucesso oculta" id="msg-denuncia">✅ Denúncia enviada</p>
+      <div id="lista-denuncias" class="lista"></div>
+    </section>
+
+    <!-- Tela de Informações -->
+    <section class="tela oculta" id="tela-informacoes">
+      <button class="btn-voltar" data-voltar>← Voltar</button>
+      <h2>♻ Conscientização</h2>
+      <p>Descartar o lixo corretamente evita o entupimento de bueiros, a proliferação de doenças e a poluição de rios e terrenos. Pequenas atitudes, como não jogar lixo nas ruas e separar materiais recicláveis, fazem grande diferença para a cidade.</p>
+      <ul>
+        <li>Nunca jogue lixo em terrenos baldios ou vias públicas.</li>
+        <li>Separe orgânicos de recicláveis.</li>
+        <li>Denuncie pontos de descarte irregular pelo app.</li>
+      </ul>
+    </section>
+
+    <!-- Tela de Reciclagem -->
+    <section class="tela oculta" id="tela-reciclagem">
+      <button class="btn-voltar" data-voltar>← Voltar</button>
+      <h2>♻ Reciclagem</h2>
+      <p>Veja como separar corretamente os materiais recicláveis:</p>
+      <div class="cores-reciclagem">
+        <div class="cor azul"><strong>Azul</strong><span>Papel</span></div>
+        <div class="cor vermelho"><strong>Vermelho</strong><span>Plástico</span></div>
+        <div class="cor verde"><strong>Verde</strong><span>Vidro</span></div>
+        <div class="cor amarelo"><strong>Amarelo</strong><span>Metal</span></div>
+        <div class="cor marrom"><strong>Marrom</strong><span>Orgânico</span></div>
+      </div>
+    </section>
+
+  </main>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
