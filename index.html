@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cidade Limpa</title>
+  <title>Cidade Limpa | Cerro Corá</title>
+  <meta name="description" content="Registre pontos de descarte irregular e aprenda a cuidar de Cerro Corá.">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -11,18 +12,19 @@
   <div class="app">
 
   <!-- Barra de menu, equivalente à JMenuBar do NetBeans -->
-  <nav class="menu-bar" id="menuBar">
+  <header class="brand"><a href="#" data-inicio>Cidade<span>Limpa</span></a><span>Cerro Corá • participação cidadã</span></header>
+  <nav class="menu-bar" id="menuBar" aria-label="Navegação principal">
     <div class="menu">
       <button class="menu-btn" data-menu="cadastro">Cadastro</button>
       <div class="dropdown" id="dropdown-cadastro">
-        <button class="dropdown-item" data-tela="cadastro">Novo Cadastro</button>
+        <button class="dropdown-item" data-tela="cadastro">Perfil local</button>
       </div>
     </div>
 
     <div class="menu">
       <button class="menu-btn" data-menu="denuncias">Denúncias</button>
       <div class="dropdown" id="dropdown-denuncias">
-        <button class="dropdown-item" data-tela="denuncia">Fazer Denúncia</button>
+        <button class="dropdown-item" data-tela="denuncia">Registrar problema</button>
       </div>
     </div>
 
@@ -40,47 +42,44 @@
     <!-- Tela Inicial -->
     <section class="tela" id="tela-inicial">
       <h1 class="titulo">CIDADE LIMPA</h1>
-      <p class="subtitulo">Juntos por uma Cerro Corá mais limpa.</p>
+      <p class="eyebrow">CUIDAR DA CIDADE COMEÇA COM A GENTE</p><p class="subtitulo">Juntos por uma Cerro Corá mais limpa.</p><p class="intro">Identifique pontos de descarte irregular, organize seus registros e descubra como dar o destino certo aos resíduos.</p><div class="hero-actions"><button class="primary" data-tela="denuncia">Registrar um problema →</button><button class="secondary" data-tela="reciclagem">Aprender a reciclar</button></div><div class="features"><article><span>01 / PARTICIPE</span><h2>Olhe para o seu bairro</h2><p>Registre o local, descreva o problema e adicione uma foto.</p></article><article><span>02 / ACOMPANHE</span><h2>Organize seus registros</h2><p>Consulte os problemas salvos e atualize seu acompanhamento.</p></article><article><span>03 / TRANSFORME</span><h2>Pequenas atitudes contam</h2><p>Separe os materiais e evite o descarte nas ruas e terrenos.</p></article></div>
     </section>
 
     <!-- Tela de Cadastro -->
     <section class="tela oculta" id="tela-cadastro">
       <button class="btn-voltar" data-voltar>← Voltar</button>
-      <h2>Novo Cadastro</h2>
+      <h2>Perfil local</h2><p class="section-note">Salve seu nome e e-mail neste navegador. Este perfil não cria uma conta online.</p>
       <form id="form-cadastro">
         <label>Nome completo
-          <input type="text" id="cad-nome" required>
+          <input type="text" id="cad-nome" required maxlength="100" autocomplete="name">
         </label>
         <label>E-mail
-          <input type="email" id="cad-email" required>
-        </label>
-        <label>Senha
-          <input type="password" id="cad-senha" required minlength="4">
+          <input type="email" id="cad-email" required maxlength="254" autocomplete="email">
         </label>
         <button type="submit">Cadastrar</button>
       </form>
-      <p class="mensagem-sucesso oculta" id="msg-cadastro">✅ Cadastro realizado</p>
+      <p role="status" class="mensagem-sucesso oculta" id="msg-cadastro">✅ Cadastro realizado</p>
       <div id="lista-usuarios" class="lista"></div>
     </section>
 
     <!-- Tela de Denúncia -->
     <section class="tela oculta" id="tela-denuncia">
       <button class="btn-voltar" data-voltar>← Voltar</button>
-      <h2>Fazer Denúncia</h2>
+      <h2>Registrar descarte irregular</h2><p class="section-note">Informe o endereço e descreva o que você observou.</p>
       <form id="form-denuncia">
         <label>Local do problema
-          <input type="text" id="den-local" required placeholder="Ex: Rua das Flores, 123">
+          <input type="text" id="den-local" required maxlength="200" placeholder="Ex: Rua das Flores, 123">
         </label>
         <label>Descrição
-          <textarea id="den-descricao" required placeholder="Descreva o que está acontecendo..."></textarea>
+          <textarea id="den-descricao" required maxlength="2000" placeholder="Descreva o que está acontecendo..."></textarea>
         </label>
-        <label>Foto (opcional)
-          <input type="file" id="den-foto" accept="image/*">
+        <label>Foto (opcional, JPG, PNG ou WebP até 2 MB)
+          <input type="file" id="den-foto" accept="image/jpeg,image/png,image/webp">
         </label>
         <img id="preview-foto" class="preview oculta" alt="Pré-visualização da foto">
-        <button type="submit">Enviar denúncia</button>
+        <button type="submit">Salvar registro</button>
       </form>
-      <p class="mensagem-sucesso oculta" id="msg-denuncia">✅ Denúncia enviada</p>
+      <p role="status" class="mensagem-sucesso oculta" id="msg-denuncia">Registro salvo neste navegador.</p>
       <div id="lista-denuncias" class="lista"></div>
     </section>
 
@@ -92,7 +91,7 @@
       <ul>
         <li>Nunca jogue lixo em terrenos baldios ou vias públicas.</li>
         <li>Separe orgânicos de recicláveis.</li>
-        <li>Denuncie pontos de descarte irregular pelo app.</li>
+        <li>Registre os pontos de descarte irregular e procure os canais oficiais do município para solicitar atendimento.</li>
       </ul>
     </section>
 
@@ -100,7 +99,7 @@
     <section class="tela oculta" id="tela-reciclagem">
       <button class="btn-voltar" data-voltar>← Voltar</button>
       <h2>♻ Reciclagem</h2>
-      <p>Veja como separar corretamente os materiais recicláveis:</p>
+      <p>Veja como separar corretamente os materiais recicláveis:</p> 
       <div class="cores-reciclagem">
         <div class="cor azul"><strong>Azul</strong><span>Papel</span></div>
         <div class="cor vermelho"><strong>Vermelho</strong><span>Plástico</span></div>
@@ -110,7 +109,7 @@
       </div>
     </section>
 
-  </main>
+  </main><footer>Protótipo local: os dados ficam neste navegador e não são enviados à prefeitura. Para solicitar atendimento, utilize os canais oficiais do município.</footer>
 
   </div>
 

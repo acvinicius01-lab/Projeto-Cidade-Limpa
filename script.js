@@ -1,25 +1,39 @@
+function lerDados(chave) {
+  try { const dados = JSON.parse(localStorage.getItem(chave) || "[]"); return Array.isArray(dados) ? dados.filter(d => d && typeof d === "object") : []; } catch { return []; }
+}
+function salvarDados(chave, dados) {
+  try { localStorage.setItem(chave, JSON.stringify(dados)); return true; } catch { alert("Não foi possível salvar. Verifique o espaço disponível e se o navegador permite armazenamento local."); return false; }
+}
+function escapar(valor) { return String(valor ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+// Remove senhas legadas do protótipo anterior.
+const perfisAntigos = lerDados("usuarios");
+if (perfisAntigos.some(u => "senha" in u)) salvarDados("usuarios", perfisAntigos.map(({nome, email}) => ({nome, email})));
 // ===== Controle do menu dropdown =====
 const menus = document.querySelectorAll(".menu");
 
 menus.forEach((menu) => {
   const botao = menu.querySelector(".menu-btn");
+  botao.setAttribute("aria-expanded", "false");
+  botao.setAttribute("aria-controls", menu.querySelector(".dropdown").id);
   botao.addEventListener("click", (e) => {
     e.stopPropagation();
     const jaAberto = menu.classList.contains("aberto");
     fecharTodosMenus();
-    if (!jaAberto) menu.classList.add("aberto");
+    if (!jaAberto) { menu.classList.add("aberto"); botao.setAttribute("aria-expanded", "true"); }
   });
 });
 
 document.addEventListener("click", fecharTodosMenus);
 
 function fecharTodosMenus() {
-  menus.forEach((menu) => menu.classList.remove("aberto"));
+  menus.forEach((menu) => { menu.classList.remove("aberto"); menu.querySelector(".menu-btn").setAttribute("aria-expanded", "false"); });
 }
 
 // ===== Navegação entre telas =====
 const telas = document.querySelectorAll(".tela");
-const itensMenu = document.querySelectorAll(".dropdown-item");
+const itensMenu = document.querySelectorAll("[data-tela]");
+document.querySelector("[data-inicio]").addEventListener("click", e => { e.preventDefault(); mostrarTela("inicial"); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") fecharTodosMenus(); });
 
 itensMenu.forEach((item) => {
   item.addEventListener("click", () => {
@@ -30,8 +44,12 @@ itensMenu.forEach((item) => {
 
 function mostrarTela(id) {
   telas.forEach((tela) => tela.classList.add("oculta"));
-  document.getElementById(`tela-${id}`).classList.remove("oculta");
+  const tela = document.getElementById(`tela-${id}`);
+  tela.classList.remove("oculta");
+  const titulo = tela.querySelector("h1, h2"); titulo.tabIndex = -1; titulo.focus();
 }
+
+// ===== Botões "Voltar" (retornam para a tela inicial) =====
 document.querySelectorAll("[data-voltar]").forEach((botao) => {
   botao.addEventListener("click", () => mostrarTela("inicial"));
 });
@@ -44,14 +62,15 @@ formCadastro.addEventListener("submit", (e) => {
   e.preventDefault();
 
   const usuario = {
-    nome: document.getElementById("cad-nome").value,
-    email: document.getElementById("cad-email").value,
-    senha: document.getElementById("cad-senha").value,
+    nome: document.getElementById("cad-nome").value.trim(),
+    email: document.getElementById("cad-email").value.trim().toLowerCase(),
   };
 
-  const usuarios = JSON.parse(localStorage.getItem("usuarios") || "[]");
+  const usuarios = lerDados("usuarios");
+  if (!usuario.nome) return;
+  if (usuarios.some(u => u.email === usuario.email)) { alert("Este e-mail já está cadastrado neste navegador."); return; }
   usuarios.push(usuario);
-  localStorage.setItem("usuarios", JSON.stringify(usuarios));
+  if (!salvarDados("usuarios", usuarios)) return;
 
   formCadastro.reset();
   mostrarMensagem("msg-cadastro");
@@ -59,12 +78,9 @@ formCadastro.addEventListener("submit", (e) => {
 });
 
 function renderizarUsuarios() {
-  const usuarios = JSON.parse(localStorage.getItem("usuarios") || "[]");
+  const usuarios = lerDados("usuarios");
   listaUsuarios.innerHTML = usuarios
-    .map(
-      (u) =>
-        `<div class="item-lista"><strong>${u.nome}</strong> — ${u.email}</div>`,
-    )
+    .map((u) => `<div class="item-lista"><strong>${escapar(u.nome)}</strong> — ${escapar(u.email)}</div>`)
     .join("");
 }
 
@@ -74,16 +90,25 @@ const inputFoto = document.getElementById("den-foto");
 const previewFoto = document.getElementById("preview-foto");
 const listaDenuncias = document.getElementById("lista-denuncias");
 let fotoBase64 = null;
+let leituraFoto = 0;
+let carregandoFoto = false;
 
 inputFoto.addEventListener("change", () => {
+  const versao = ++leituraFoto;
+  fotoBase64 = null; carregandoFoto = false; previewFoto.classList.add("oculta");
   const arquivo = inputFoto.files[0];
   if (!arquivo) {
     fotoBase64 = null;
     previewFoto.classList.add("oculta");
     return;
   }
+  if (!["image/jpeg", "image/png", "image/webp"].includes(arquivo.type) || arquivo.size > 2 * 1024 * 1024) { alert("Selecione JPG, PNG ou WebP de até 2 MB."); inputFoto.value = ""; return; }
+  carregandoFoto = true;
   const leitor = new FileReader();
+  leitor.onerror = () => { if (versao !== leituraFoto) return; carregandoFoto = false; inputFoto.value = ""; alert("Não foi possível ler a foto."); };
   leitor.onload = () => {
+    if (versao !== leituraFoto) return;
+    carregandoFoto = false;
     fotoBase64 = leitor.result;
     previewFoto.src = fotoBase64;
     previewFoto.classList.remove("oculta");
@@ -94,16 +119,22 @@ inputFoto.addEventListener("change", () => {
 formDenuncia.addEventListener("submit", (e) => {
   e.preventDefault();
 
+  if (carregandoFoto) { alert("Aguarde o carregamento da foto."); return; }
+  const local = document.getElementById("den-local").value.trim();
+  const descricao = document.getElementById("den-descricao").value.trim();
+  if (!local || !descricao) { alert("Preencha o local e a descrição."); return; }
   const denuncia = {
-    local: document.getElementById("den-local").value,
-    descricao: document.getElementById("den-descricao").value,
+    id: crypto.randomUUID(),
+    local,
+    descricao,
     foto: fotoBase64,
     data: new Date().toLocaleString("pt-BR"),
+    status: "pendente",
   };
 
-  const denuncias = JSON.parse(localStorage.getItem("denuncias") || "[]");
+  const denuncias = lerDados("denuncias");
   denuncias.push(denuncia);
-  localStorage.setItem("denuncias", JSON.stringify(denuncias));
+  if (!salvarDados("denuncias", denuncias)) return;
 
   formDenuncia.reset();
   fotoBase64 = null;
@@ -113,18 +144,53 @@ formDenuncia.addEventListener("submit", (e) => {
 });
 
 function renderizarDenuncias() {
-  const denuncias = JSON.parse(localStorage.getItem("denuncias") || "[]");
+  const denuncias = lerDados("denuncias");
+  if (!denuncias.length) { listaDenuncias.textContent = "Nenhum registro por aqui. Comece informando um problema no seu bairro."; return; }
   listaDenuncias.innerHTML = denuncias
     .map(
       (d) => `
-      <div class="item-lista">
-        <strong>${d.local}</strong> — ${d.data}<br>
-        ${d.descricao}
-        ${d.foto ? `<img src="${d.foto}" alt="Foto da denúncia">` : ""}
-      </div>`,
+      <div class="item-lista ${d.status === "concluida" ? "concluida" : ""}">
+        <div class="item-topo">
+          <strong>${escapar(d.local)}</strong>
+          <span class="badge ${d.status === "concluida" ? "badge-concluida" : "badge-pendente"}">
+            ${d.status === "concluida" ? "Concluída" : "Pendente"}
+          </span>
+        </div>
+        <span class="item-data">${escapar(d.data)}</span>
+        <p>${escapar(d.descricao)}</p>
+        ${typeof d.foto === "string" && /^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(d.foto) ? `<img src="${d.foto}" alt="Foto da denúncia">` : ""}
+        <div class="item-acoes">
+          <button class="btn-concluir" data-id="${escapar(d.id)}">
+            ${d.status === "concluida" ? "↺ Reabrir" : "✔ Concluir"}
+          </button>
+          <button class="btn-remover" data-id="${escapar(d.id)}">🗑 Remover</button>
+        </div>
+      </div>`
     )
     .join("");
 }
+
+listaDenuncias.addEventListener("click", (e) => {
+  const denuncias = lerDados("denuncias");
+
+  if (e.target.matches(".btn-concluir")) {
+    const id = e.target.dataset.id;
+    const denuncia = denuncias.find((d) => String(d.id) === id);
+    if (!denuncia) return;
+    denuncia.status = denuncia.status === "concluida" ? "pendente" : "concluida";
+    if (!salvarDados("denuncias", denuncias)) return;
+    renderizarDenuncias();
+  }
+
+  if (e.target.matches(".btn-remover")) {
+    const id = e.target.dataset.id;
+    const confirmar = confirm("Tem certeza que deseja remover esta denúncia?");
+    if (!confirmar) return;
+    const restantes = denuncias.filter((d) => String(d.id) !== id);
+    if (!salvarDados("denuncias", restantes)) return;
+    renderizarDenuncias();
+  }
+});
 
 // ===== Utilitário: mostra mensagem de sucesso por 3 segundos =====
 function mostrarMensagem(id) {
