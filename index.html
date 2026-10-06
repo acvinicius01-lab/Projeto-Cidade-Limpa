@@ -11,38 +11,26 @@
 
   <div class="app">
 
-  <!-- Barra de menu, equivalente à JMenuBar do NetBeans -->
-  <header class="brand"><a href="#" data-inicio>Cidade<span>Limpa</span></a><span>Cerro Corá • participação cidadã</span></header>
-  <nav class="menu-bar" id="menuBar" aria-label="Navegação principal">
-    <div class="menu">
-      <button class="menu-btn" data-menu="cadastro">Cadastro</button>
-      <div class="dropdown" id="dropdown-cadastro">
-        <button class="dropdown-item" data-tela="cadastro">Perfil local</button>
-      </div>
-    </div>
-
-    <div class="menu">
-      <button class="menu-btn" data-menu="denuncias">Denúncias</button>
-      <div class="dropdown" id="dropdown-denuncias">
-        <button class="dropdown-item" data-tela="denuncia">Registrar problema</button>
-      </div>
-    </div>
-
-    <div class="menu">
-      <button class="menu-btn" data-menu="conscientizacao">Conscientização</button>
-      <div class="dropdown" id="dropdown-conscientizacao">
-        <button class="dropdown-item" data-tela="informacoes">Informações</button>
-        <button class="dropdown-item" data-tela="reciclagem">Reciclagem</button>
-      </div>
-    </div>
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+  <header class="brand"><a href="#inicial" data-inicio><span class="brand-icon" aria-hidden="true">↗</span> Cidade<span>Limpa</span></a><span>Cerro Corá <span class="location-dot">●</span> participação cidadã</span></header>
+  <nav class="menu-bar" aria-label="Navegação principal">
+    <button data-tela="inicial" aria-current="page">Início</button>
+    <button data-tela="denuncia">Registrar problema</button>
+    <button data-tela="registros">Meus registros <span id="nav-count">0</span></button>
+    <button data-tela="reciclagem">Reciclagem</button>
+    <button data-tela="informacoes">Conscientização</button>
+    <button data-tela="cadastro">Perfil local</button>
   </nav>
 
-  <main class="janela">
+  <main class="janela" id="conteudo" tabindex="-1">
+    <p id="feedback" class="feedback oculta" role="alert"></p>
 
     <!-- Tela Inicial -->
     <section class="tela" id="tela-inicial">
-      <h1 class="titulo">CIDADE LIMPA</h1>
-      <p class="eyebrow">CUIDAR DA CIDADE COMEÇA COM A GENTE</p><p class="subtitulo">Juntos por uma Cerro Corá mais limpa.</p><p class="intro">Identifique pontos de descarte irregular, organize seus registros e descubra como dar o destino certo aos resíduos.</p><div class="hero-actions"><button class="primary" data-tela="denuncia">Registrar um problema →</button><button class="secondary" data-tela="reciclagem">Aprender a reciclar</button></div><div class="features"><article><span>01 / PARTICIPE</span><h2>Olhe para o seu bairro</h2><p>Registre o local, descreva o problema e adicione uma foto.</p></article><article><span>02 / ACOMPANHE</span><h2>Organize seus registros</h2><p>Consulte os problemas salvos e atualize seu acompanhamento.</p></article><article><span>03 / TRANSFORME</span><h2>Pequenas atitudes contam</h2><p>Separe os materiais e evite o descarte nas ruas e terrenos.</p></article></div>
+      <div class="hero"><div class="hero-copy"><p class="eyebrow">NOSSA CIDADE. NOSSO CUIDADO.</p><h1 class="titulo">Uma cidade melhor<br>começa <em>com você.</em></h1><p class="intro">Ajude a cuidar de Cerro Corá. Registre pontos de descarte irregular e acompanhe suas ações em um só lugar.</p><div class="hero-actions"><button class="primary" data-tela="denuncia">Registrar um problema <span aria-hidden="true">↗</span></button><button class="secondary" data-tela="registros">Ver meus registros</button></div><p class="hero-note">Sem cadastro obrigatório · Registros salvos neste navegador</p></div><aside class="hero-panel"><span class="panel-icon" aria-hidden="true">♻</span><p class="eyebrow">CADA ATITUDE CONTA</p><h2>Cuide do lugar<br>que você chama de lar.</h2><p>Observe, registre e faça parte da mudança no seu bairro.</p><span class="panel-tag">Cerro Corá • Cidade Limpa</span></aside></div>
+      <div class="stats" aria-label="Resumo dos seus registros"><div><strong id="stat-total">0</strong><span>Registros locais</span></div><div><strong id="stat-pending">0</strong><span>Em acompanhamento</span></div><div><strong id="stat-done">0</strong><span>Concluídos por você</span></div></div>
+      <div class="section-heading"><div><p class="eyebrow">PARTICIPAÇÃO SIMPLES</p><h2>Pequenas ações, mais cuidado.</h2></div><span>Do seu bairro para toda a cidade.</span></div>
+      <div class="features"><article><span>01 / OBSERVE</span><h2>Encontrou um problema?</h2><p>Informe o endereço e uma referência para identificar o local.</p><button class="text-button" data-tela="denuncia">Criar registro →</button></article><article><span>02 / ACOMPANHE</span><h2>Tenha tudo organizado</h2><p>Encontre seus registros e atualize seu acompanhamento pessoal.</p><button class="text-button" data-tela="registros">Ver registros →</button></article><article><span>03 / APRENDA</span><h2>Dê o destino certo</h2><p>Conheça a separação dos materiais e adote novos hábitos.</p><button class="text-button" data-tela="reciclagem">Explorar reciclagem →</button></article></div>
     </section>
 
     <!-- Tela de Cadastro -->
@@ -56,7 +44,7 @@
         <label>E-mail
           <input type="email" id="cad-email" required maxlength="254" autocomplete="email">
         </label>
-        <button type="submit">Cadastrar</button>
+        <button type="submit">Salvar perfil local</button>
       </form>
       <p role="status" class="mensagem-sucesso oculta" id="msg-cadastro">✅ Cadastro realizado</p>
       <div id="lista-usuarios" class="lista"></div>
@@ -65,23 +53,27 @@
     <!-- Tela de Denúncia -->
     <section class="tela oculta" id="tela-denuncia">
       <button class="btn-voltar" data-voltar>← Voltar</button>
-      <h2>Registrar descarte irregular</h2><p class="section-note">Informe o endereço e descreva o que você observou.</p>
-      <form id="form-denuncia">
+      <h2>Registrar descarte irregular</h2><p class="section-note">Um bom registro começa com informações claras. Os campos marcados com * são obrigatórios.</p>
+      <div class="form-layout"><form id="form-denuncia" class="form-card">
         <label>Local do problema
           <input type="text" id="den-local" required maxlength="200" placeholder="Ex: Rua das Flores, 123">
         </label>
         <label>Descrição
-          <textarea id="den-descricao" required maxlength="2000" placeholder="Descreva o que está acontecendo..."></textarea>
+          <textarea id="den-descricao" required maxlength="2000" placeholder="Ex.: acúmulo de sacos de lixo no terreno ao lado da praça, observado hoje pela manhã." aria-describedby="description-count"></textarea>
         </label>
-        <label>Foto (opcional, JPG, PNG ou WebP até 2 MB)
+        <span id="description-count" class="field-hint">0 / 2000 caracteres</span>
+        <label class="upload-field">Foto (opcional, JPG, PNG ou WebP até 2 MB)
           <input type="file" id="den-foto" accept="image/jpeg,image/png,image/webp">
         </label>
         <img id="preview-foto" class="preview oculta" alt="Pré-visualização da foto">
-        <button type="submit">Salvar registro</button>
-      </form>
+        <button type="button" id="remove-photo" class="text-button oculta">Remover foto</button>
+        <button type="submit">Salvar registro →</button>
+      </form><aside class="form-help"><span class="eyebrow">ANTES DE REGISTRAR</span><h3>Alguns detalhes fazem diferença.</h3><ul><li>Inclua uma referência fácil de encontrar.</li><li>Descreva o tipo de resíduo e a situação.</li><li>Se possível, anexe uma foto do local.</li></ul><p>Este registro é pessoal. Para solicitar coleta ou atendimento, procure os canais oficiais do município.</p></aside></div>
       <p role="status" class="mensagem-sucesso oculta" id="msg-denuncia">Registro salvo neste navegador.</p>
-      <div id="lista-denuncias" class="lista"></div>
+      <button class="text-button" data-tela="registros">Consultar meus registros →</button>
     </section>
+
+    <section class="tela oculta" id="tela-registros"><button class="btn-voltar" data-voltar>← Início</button><div class="section-heading"><div><p class="eyebrow">SEU ACOMPANHAMENTO</p><h2>Meus registros</h2><p class="section-note">Consulte e organize os problemas que você registrou neste navegador.</p></div><button class="primary" data-tela="denuncia">+ Novo registro</button></div><div class="filters"><label>Buscar por local ou descrição<input type="search" id="search-records" placeholder="Digite um endereço ou palavra-chave"></label><label>Status<select id="filter-status"><option value="todos">Todos os registros</option><option value="pendente">Em acompanhamento</option><option value="concluida">Concluídos por mim</option></select></label></div><p id="results-count" class="field-hint" role="status"></p><div id="lista-denuncias" class="lista"></div></section>
 
     <!-- Tela de Informações -->
     <section class="tela oculta" id="tela-informacoes">

@@ -26,4 +26,6 @@ Para operar como serviço municipal, será necessário definir o canal responsá
 
 ## Verificação
 
-Execute `node --check script.js` e `node --test tests/storage.test.cjs`.
+Execute `node --check script.js` e `node --test tests/*.test.cjs`.
+
+A interface inclui navegação direta, resumo dos registros, busca por endereço ou descrição, filtro por status, contador de caracteres e remoção da foto antes de salvar.

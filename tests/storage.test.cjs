@@ -4,7 +4,7 @@ const fs = require('node:fs');
 const vm = require('node:vm');
 const source = fs.readFileSync('script.js', 'utf8').split('// Remove senhas legadas')[0];
 function context(storage) {
-  const ctx = vm.createContext({ localStorage: storage, alert: () => {} });
+  const ctx = vm.createContext({ localStorage: storage, document: { getElementById: () => ({ textContent: '', classList: { remove() {} }, scrollIntoView() {} }) } });
   vm.runInContext(source, ctx);
   return ctx;
 }
